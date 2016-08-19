@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">AndroidBehavior</string>
+    <string name="quila_name">Quila</string>
+    <string name="quila_tagline">I love bones and slippers</string>
+    <string name="quila_name2">Quila!</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -90,4 +93,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="favorite">Favorite</string>
 </resources>
