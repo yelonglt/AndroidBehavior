@@ -94,4 +94,5 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="favorite">Favorite</string>
+    <string name="bottom_menu">我是底部菜单</string>
 </resources>

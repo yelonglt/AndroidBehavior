@@ -1,10 +1,12 @@
 package com.dmall.behavior;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
@@ -36,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         mAppBarLayout.addOnOffsetChangedListener(this);
 
+        mToolbar.setTitle("");
         mToolbar.inflateMenu(R.menu.menu_main);
+        setSupportActionBar(mToolbar);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
     }
 
@@ -44,6 +48,19 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, BehaviorActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            
+
             if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;

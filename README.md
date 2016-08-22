@@ -10,4 +10,4 @@ Android CoordinatorLayout Behavior
 1.情况一，某个View监听另一个View的状态变化，如大小、位置、显示状态等。对于情况一，我们关心的是layoutDependsOn和onDependentViewChanged这两个方法
 2.情况二，某个View监听CoordinatorLayout里面的滑动状态。对于情况二，我们关心的是onStartNestedScroll和onNestedPreScroll
 
->参考资料: </br>http://www.jianshu.com/p/d372d37e8640</br>http://blog.csdn.net/qibin0506/article/details/50377592</br>https://github.com/saulmm/CoordinatorBehaviorExample
+>参考资料: </br>http://www.jianshu.com/p/d372d37e8640</br>http://www.jianshu.com/p/5ffb37226e72</br>http://blog.csdn.net/qibin0506/article/details/50377592</br>https://github.com/saulmm/CoordinatorBehaviorExample
