@@ -15,13 +15,6 @@ import android.view.View;
 public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageView> {
 
     private Context mContext;
-
-    private float mCustomFinalYPosition;
-    private float mCustomStartXPosition;
-    private float mCustomStartToolbarPosition;
-    private float mCustomStartHeight;
-    private float mCustomFinalHeight;
-
     //Toolbar的初始Y坐标
     private float mStartToolbarPosition;
     //设置AvatarImageBehavior的View的XY开始坐标,即是CircleImageView
@@ -32,6 +25,11 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
 
     //CircleImageView的开始高度
     private int mStartHeight;
+    private int mFinalHeight;
+
+    //CircleImageView需要偏移的高度
+    private float mOffsetHeight;
+
     private float mChangeBehaviorPoint;
 
     public AvatarImageBehavior(Context context, AttributeSet attrs) {
@@ -39,12 +37,8 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
 
         if (null != attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AvatarImageBehavior);
-            mCustomFinalYPosition = a.getDimension(R.styleable.AvatarImageBehavior_finalYPosition, 0);
-            mCustomStartXPosition = a.getDimension(R.styleable.AvatarImageBehavior_startXPosition, 0);
-            mCustomStartToolbarPosition = a.getDimension(R.styleable.AvatarImageBehavior_startToolbarPosition, 0);
-            mCustomStartHeight = a.getDimension(R.styleable.AvatarImageBehavior_startHeight, 0);
-            mCustomFinalHeight = a.getDimension(R.styleable.AvatarImageBehavior_finalHeight, 0);
-
+            mFinalHeight = (int) a.getDimension(R.styleable.AvatarImageBehavior_finalHeight, 0);
+            mOffsetHeight = a.getDimension(R.styleable.AvatarImageBehavior_offsetHeight, 0);
             a.recycle();
         }
     }
@@ -59,7 +53,9 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
     public boolean onDependentViewChanged(CoordinatorLayout parent, CircleImageView child, View dependency) {
         initProperties(child, dependency);
 
-        final int maxScrollDistance = (int) (mStartToolbarPosition);
+        // 最大滑动距离: 起始位置-状态栏高度
+        final int maxScrollDistance = (int) (mStartToolbarPosition - getStatusBarHeight() + mOffsetHeight);
+        // 滑动的百分比
         float expandedPercentageFactor = dependency.getY() / maxScrollDistance;
 
         if (expandedPercentageFactor < mChangeBehaviorPoint) {
@@ -73,7 +69,7 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
             child.setX(mStartXPosition - distanceXToSubtract);
             child.setY(mStartYPosition - distanceYToSubtract);
 
-            float heightToSubtract = ((mStartHeight - mCustomFinalHeight) * heightFactor);
+            float heightToSubtract = ((mStartHeight - mFinalHeight) * heightFactor);
 
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
             lp.width = (int) (mStartHeight - heightToSubtract);
@@ -108,17 +104,17 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
             mStartXPosition = (int) (child.getX() + (child.getWidth() / 2));
 
         if (mFinalXPosition == 0)
-            mFinalXPosition = mContext.getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_content_inset_material) + ((int) mCustomFinalHeight / 2);
+            mFinalXPosition = mContext.getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_content_inset_material) + ((int) mFinalHeight / 2);
 
         if (mStartToolbarPosition == 0)
             mStartToolbarPosition = dependency.getY();
 
         if (mChangeBehaviorPoint == 0) {
-            mChangeBehaviorPoint = (child.getHeight() - mCustomFinalHeight) / (2f * (mStartYPosition - mFinalYPosition));
+            mChangeBehaviorPoint = (child.getHeight() - mFinalHeight) / (2f * (mStartYPosition - mFinalYPosition));
         }
     }
 
-    public int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         int result = 0;
         int resourceId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
 
